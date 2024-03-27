@@ -32,6 +32,7 @@ class NearEarthObject:
     initialized to an empty collection, but eventually populated in the
     `NEODatabase` constructor.
     """
+
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, pdes, **info):
@@ -45,9 +46,9 @@ class NearEarthObject:
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
         self.designation = pdes
-        self.name = info.get('name') if info.get('name') != '' else None
-        self.diameter = float(info.get('diameter')) if info.get('diameter') != '' else float('nan')
-        self.hazardous = True if info.get('hazardous') == "Y" else False
+        self.name = info.get('name') or None
+        self.diameter = float(info.get('diameter')) if info.get('diameter') else float('nan')
+        self.hazardous = info.get('hazardous') == "Y"
         # Create an empty initial collection of linked approaches.
         self.approaches = []
 
@@ -63,8 +64,10 @@ class NearEarthObject:
         # Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        diameter_str = str(self.diameter)
-        return f"NEO {self.designation} {'(' + self.name + ') ' if self.name is not None else ''}{'has a diameter of ' + diameter_str + ' km and ' if diameter_str != 'nan' else ''}is potentially {'' if self.hazardous else 'not '}hazardous."
+        formatted_diameter = f"{self.diameter:.3f}"
+        return f"NEO {self.designation} {'(' + self.name + ') ' if self.name is not None else ''}" \
+               f"{f'has a diameter of {formatted_diameter} km and ' if self.diameter != 'nan' else ''}is potentially " \
+               f"{'' if self.hazardous else 'not '}hazardous."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
@@ -85,6 +88,7 @@ class CloseApproach(NearEarthObject):
     private attribute, but the referenced NEO is eventually replaced in the
     `NEODatabase` constructor.
     """
+
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, des, **info):
@@ -130,11 +134,10 @@ class CloseApproach(NearEarthObject):
         # Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return (f"At {self.time_str}, {self._fullname} approaches Earth at a distance of {self.distance} au and a "
-                f"velocity of {self.velocity} km/s")
+        return (f"At {self.time_str}, {self._fullname} approaches Earth at a distance of {self.distance:.2f} au and a "
+                f"velocity of {self.velocity:.2f} km/s")
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, " \
                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
-
