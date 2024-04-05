@@ -33,18 +33,12 @@ class NearEarthObject:
     `NEODatabase` constructor.
     """
 
-    # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, pdes, **info):
         """Create a new `NearEarthObject`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        # TODO: Assign information from the arguments passed to the constructor
-        # onto attributes named `designation`, `name`, `diameter`, and `hazardous`.
-        # You should coerce these values to their appropriate data type and
-        # handle any edge cases, such as a empty name being represented by `None`
-        # and a missing diameter being represented by `float('nan')`.
         self.designation = pdes
         self.name = info.get('name') or None
         self.diameter = float(info.get('diameter')) if info.get('diameter') else float('nan')
@@ -89,8 +83,6 @@ class CloseApproach(NearEarthObject):
     `NEODatabase` constructor.
     """
 
-    # TODO: How can you, and should you, change the arguments to this constructor?
-    # If you make changes, be sure to update the comments in this file.
     def __init__(self, des, **info):
         """Create a new `CloseApproach`.
 

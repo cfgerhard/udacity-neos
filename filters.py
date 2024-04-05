@@ -16,6 +16,7 @@ iterator.
 
 You'll edit this file in Tasks 3a and 3c.
 """
+import itertools
 import operator
 
 
@@ -38,6 +39,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -69,10 +71,13 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Return a string representation of this filter."""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 
 class DateFilter(AttributeFilter):
+    """Get Date attribute from a close approach."""
+
     @classmethod
     def get(cls, approach):
         """Get the date of a close approach."""
@@ -80,6 +85,8 @@ class DateFilter(AttributeFilter):
 
 
 class DistanceFilter(AttributeFilter):
+    """Get Distance attribute from a close approach."""
+
     @classmethod
     def get(cls, approach):
         """Get the distance of a close approach."""
@@ -87,6 +94,8 @@ class DistanceFilter(AttributeFilter):
 
 
 class VelocityFilter(AttributeFilter):
+    """Get Velocity Attribute from a close approach."""
+
     @classmethod
     def get(cls, approach):
         """Get the velocity of a close approach."""
@@ -94,13 +103,17 @@ class VelocityFilter(AttributeFilter):
 
 
 class DiameterFilter(AttributeFilter):
+    """Get Diameter Attribute from a close approach."""
+
     @classmethod
     def get(cls, approach):
         """Get the diameter of a close approach."""
         return approach.neo.diameter
 
 
-class  HazardousFilter(AttributeFilter):
+class HazardousFilter(AttributeFilter):
+    """Get Hazardous Attribute from a close approach."""
+
     @classmethod
     def get(cls, approach):
         """Get the hazardousness of a close approach."""
@@ -143,13 +156,12 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
     filters = []
     if date:
         filters.append(DateFilter(operator.eq, date))
     if start_date:
         filters.append(DateFilter(operator.ge, start_date))
-    if  end_date:
+    if end_date:
         filters.append(DateFilter(operator.le, end_date))
     if distance_min:
         filters.append(DistanceFilter(operator.ge, distance_min))
@@ -177,7 +189,6 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
-    if n ==  0 or n is None:
-        return iterator
-    return [x for i, x in enumerate(iterator) if i < n]
+    if n:
+        return itertools.islice(iterator, n)
+    return iterator
